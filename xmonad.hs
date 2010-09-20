@@ -1,6 +1,8 @@
 import XMonad
 import XMonad.Config.Desktop
 import XMonad.Config.Gnome
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.SetWMName
 import XMonad.Layout.IM
 import XMonad.Layout.PerWorkspace
 import XMonad.Prompt
@@ -18,6 +20,7 @@ main = xmonad $ gnomeConfig {
        , workspaces = myWorkspaces
        , layoutHook = myLayoutHook
        , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
+       , startupHook = startupHook gnomeConfig >> setWMName "LG3D"
        }
        `additionalKeysP`
        myKeymap
