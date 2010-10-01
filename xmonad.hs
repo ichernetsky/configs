@@ -8,6 +8,7 @@ import XMonad.Hooks.SetWMName
 import XMonad.Layout.Grid
 import XMonad.Layout.IM
 import XMonad.Layout.LayoutModifier
+import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Reflect
 import XMonad.Prompt
@@ -38,7 +39,7 @@ myTerminal = "urxvt"
 myWorkspaces :: [String]
 myWorkspaces = [ "web", "dev", "term", "im", "office" ]
 
-myLayoutHook =
+myLayoutHook = smartBorders $
     onWorkspace "im" imLayout
     $ defaultLayout
 
