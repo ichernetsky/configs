@@ -1,3 +1,3 @@
-# My xmonad config
+# configs
 
-Use it at your own risk.
+My dot files and the like. Use it at your own risk.
