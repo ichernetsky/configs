@@ -27,8 +27,11 @@
 (show-paren-mode t)
 (column-number-mode t)
 
+(global-visual-line-mode t)
+(iswitchb-mode t)
+
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "chromium")
+      browse-url-generic-program "chromium --incognito")
 
 (if (require 'edit-server "edit-server.el" t)
     (edit-server-start))
@@ -59,7 +62,8 @@
 (if (file-exists-p "~/dev/clojure-mode")
     (progn
       (add-to-list 'load-path "~/dev/clojure-mode/")
-      (require 'clojure-mode)))
+      (require 'clojure-mode)
+      (add-hook 'slime-repl-mode-hook 'clojure-mode-font-lock-setup)))
 
 (if (file-executable-p "~/bin/xref")
     (progn
