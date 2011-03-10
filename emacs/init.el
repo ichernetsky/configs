@@ -2,6 +2,9 @@
 
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
+(if (require 'zenburn "zenburn.el" t)
+    (color-theme-zenburn))
+
 ;; do not make backup files
 (setq make-backup-files nil)
 (auto-save-mode nil)
