@@ -2,6 +2,8 @@
 
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
+(set-default-font "-xos4-terminus-bold-*-*-*-14-*-*-*-*-*-iso10646-1")
+
 (if (require 'zenburn "zenburn.el" t)
     (color-theme-zenburn))
 
