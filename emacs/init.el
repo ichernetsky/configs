@@ -94,3 +94,8 @@
 (if (file-exists-p "~/.emacs.d/init-local.el")
     (load "~/.emacs.d/init-local.el"))
 
+(if (file-exists-p "~/dev/distel")
+    (progn
+      (add-to-list 'load-path "~/dev/distel/elisp/")
+      (require 'distel)
+      (distel-setup)))
