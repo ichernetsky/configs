@@ -75,11 +75,14 @@
       (add-to-list 'load-path (concat xref-dir "emacs/"))
       (require 'xrefactory "xrefactory.el" t)))
 
-(if (member 'haskell-mode features)
+(if (require 'haskell-mode "haskell-mode.el" t)
     (add-hook 'haskell-mode-hook
               (lambda ()
                 (turn-on-haskell-doc-mode)
                 (turn-on-haskell-indent)
+                (turn-on-haskell-font-lock)
+                (turn-on-haskell-decl-scan)
+                (turn-on-haskell-indentation)
                 (local-set-key [return] 'newline-and-indent)
                 (local-set-key "\C-ch" 'haskell-hoogle)
                 (local-set-key "\C-c\C-h" 'haskell-hayoo)
@@ -99,3 +102,7 @@
       (add-to-list 'load-path "~/dev/distel/elisp/")
       (require 'distel)
       (distel-setup)))
+
+(if (require 'markdown-mode "markdown-mode.el" t)
+    (setq auto-mode-alist
+          (cons '("\\.md" . markdown-mode) auto-mode-alist)))
