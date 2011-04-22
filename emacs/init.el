@@ -39,6 +39,13 @@
 (if (require 'edit-server "edit-server.el" t)
     (edit-server-start))
 
+(if (require 'show-wspace "show-wspace.el" t)
+    (add-hook 'c-mode-hook
+              (lambda ()
+                (show-ws-highlight-tabs)
+                (show-ws-highlight-hard-spaces)
+                (show-ws-highlight-trailing-whitespace))))
+
 (setq c-basic-offset 4)
 (setq c-default-style '((java-mode . "java")
                         (awk-mode . "awk")
