@@ -39,6 +39,15 @@
 (if (require 'edit-server "edit-server.el" t)
     (edit-server-start))
 
+(setq c-basic-offset 4)
+(setq c-default-style '((java-mode . "java")
+                        (awk-mode . "awk")
+                        (other . "k&r")))
+
+(add-hook 'c-initialization-hook
+          (lambda ()
+            (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
+
 (setq inferior-lisp-program "/usr/bin/sbcl")
 
 (if (not (member 'slime features))
