@@ -103,13 +103,12 @@ myKeymap =
 
 myManageHook =
     [ scratchpadManageHook (W.RationalRect 0.325 0.6 0.641 0.35)
-    , web "Chrome"
+    , web "Chromium-browser"
     , web "Firefox"
     , dev "Emacs"
     , im "Pidgin"
     , im "Skype"
-    , office "Thunderbird"
-    , office "OpenOffice.org 3.2" ]
+    , office "Thunderbird" ]
 
 web = associate "web"
 dev = associate "dev"
