@@ -57,23 +57,21 @@
 
 (setq inferior-lisp-program "/usr/bin/sbcl")
 
-(if (not (member 'slime features))
+(if (file-exists-p "/usr/share/emacs/site-lisp/slime")
     (progn
       (add-to-list 'load-path
                    "/usr/share/emacs/site-lisp/slime")
-      (if (require 'slime-autoloads "slime-autoloads.el" t)
-          (slime-setup '(slime-fancy slime-mrepl
-                                     slime-asdf slime-banner
-                                     slime-xref-browser)))))
-
-(if (member 'slime features)
-    (progn
+      (require 'slime-autoloads)
+      (slime-setup '(slime-fancy slime-mrepl slime-scratch
+                                 slime-asdf slime-banner
+                                 slime-xref-browser))
       (setq slime-net-coding-system 'utf-8-unix)
       (setq slime-use-autodoc-mode nil)
       (setq common-lisp-hyperspec-root
             (if (file-exists-p "/usr/share/doc/hyperspec/HyperSpec")
                 "file:///usr/share/doc/hyperspec/HyperSpec/"
-              "http://www.lispworks.com/reference/HyperSpec/"))))
+              "http://www.lispworks.com/reference/HyperSpec/"))
+      (setq slime-scratch-file "~/.emacs.d/slime-scratch")))
 
 (setq user-full-name "Ivan Chernetsky")
 (setq gnus-select-method '(nntp "news.sunsite.dk"))
@@ -122,3 +120,6 @@
 (if (require 'markdown-mode "markdown-mode.el" t)
     (setq auto-mode-alist
           (cons '("\\.md" . markdown-mode) auto-mode-alist)))
+
+(if (file-exists-p "~/dev/geiser/build/elisp/geiser-load.el")
+    (load "~/dev/geiser/build/elisp/geiser-load"))
