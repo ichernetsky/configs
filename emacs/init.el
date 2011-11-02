@@ -2,7 +2,8 @@
 
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-(set-default-font "-xos4-terminus-bold-*-*-*-14-*-*-*-*-*-iso10646-1")
+(custom-set-faces
+ '(default ((t (:inherit nil :stipple nil :background "#042028" :foreground "#708183" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
 
 (if (require 'zenburn "zenburn.el" t)
     (color-theme-zenburn))
