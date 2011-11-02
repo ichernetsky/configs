@@ -5,8 +5,10 @@
 (custom-set-faces
  '(default ((t (:inherit nil :stipple nil :background "#042028" :foreground "#708183" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
 
-(if (require 'zenburn "zenburn.el" t)
-    (color-theme-zenburn))
+(add-to-list 'load-path "~/.emacs.d/site-lisp/solarized")
+
+(if (require 'color-theme-solarized "color-theme-solarized.el" t)
+    (color-theme-solarized-dark))
 
 ;; do not make backup files
 (setq make-backup-files nil)
