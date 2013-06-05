@@ -1,14 +1,29 @@
-(require 'site-gentoo "site-gentoo.el" t)
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
-(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
 
-(custom-set-faces
- '(default ((t (:inherit nil :stipple nil :background "#042028" :foreground "#708183" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
+(setq el-get-sources
+      '((:name show-wspace
+               :after (add-hook 'c-mode-hook
+                                (lambda ()
+                                  (show-ws-highlight-tabs)
+                                  (show-ws-highlight-hard-spaces)
+                                  (show-ws-highlight-trailing-whitespace))))))
 
-(add-to-list 'load-path "~/.emacs.d/site-lisp/solarized")
+(setq dim-packages
+      (append
+       ;; list of packages we use straight from official recipes
+       '(markdown-mode cmake-mode)
 
-(if (require 'color-theme-solarized "color-theme-solarized.el" t)
-    (color-theme-solarized-dark))
+       (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync dim-packages)
 
 ;; do not make backup files
 (setq make-backup-files nil)
@@ -35,94 +50,13 @@
 (global-visual-line-mode t)
 (iswitchb-mode t)
 
-(setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "chromium"
-      browse-url-generic-args '("--incognito"))
-
-(if (require 'edit-server "edit-server.el" t)
-    (edit-server-start))
-
-(if (require 'show-wspace "show-wspace.el" t)
-    (add-hook 'c-mode-hook
-              (lambda ()
-                (show-ws-highlight-tabs)
-                (show-ws-highlight-hard-spaces)
-                (show-ws-highlight-trailing-whitespace))))
-
 (setq c-basic-offset 4)
 (setq c-default-style '((java-mode . "java")
                         (awk-mode . "awk")
                         (other . "k&r")))
 
-(add-hook 'c-initialization-hook
-          (lambda ()
-            (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
-
-(setq inferior-lisp-program "/usr/bin/sbcl")
-
-(if (file-exists-p "/usr/share/emacs/site-lisp/slime")
-    (progn
-      (add-to-list 'load-path
-                   "/usr/share/emacs/site-lisp/slime")
-      (require 'slime-autoloads)
-      (slime-setup '(slime-fancy slime-mrepl slime-scratch
-                                 slime-asdf slime-banner
-                                 slime-xref-browser))
-      (setq slime-net-coding-system 'utf-8-unix)
-      (setq slime-use-autodoc-mode nil)
-      (setq common-lisp-hyperspec-root
-            (if (file-exists-p "/usr/share/doc/hyperspec/HyperSpec")
-                "file:///usr/share/doc/hyperspec/HyperSpec/"
-              "http://www.lispworks.com/reference/HyperSpec/"))
-      (setq slime-scratch-file "~/.emacs.d/slime-scratch")))
-
 (setq user-full-name "Ivan Chernetsky")
 (setq gnus-select-method '(nntp "news.sunsite.dk"))
 
-(if (file-exists-p "~/dev/clojure-mode")
-    (progn
-      (add-to-list 'load-path "~/dev/clojure-mode/")
-      (require 'clojure-mode)
-      (add-hook 'slime-repl-mode-hook 'clojure-mode-font-lock-setup)))
-
-(if (file-executable-p "~/bin/xref")
-    (progn
-      (setq xref-dir "~/bin/xref/")
-      (add-to-list 'exec-path xref-dir)
-      (add-to-list 'load-path (concat xref-dir "emacs/"))
-      (require 'xrefactory "xrefactory.el" t)))
-
-(if (require 'haskell-mode "haskell-mode.el" t)
-    (add-hook 'haskell-mode-hook
-              (lambda ()
-                (turn-on-haskell-doc-mode)
-                (turn-on-haskell-indent)
-                (turn-on-haskell-font-lock)
-                (turn-on-haskell-decl-scan)
-                (turn-on-haskell-indentation)
-                (local-set-key [return] 'newline-and-indent)
-                (local-set-key "\C-ch" 'haskell-hoogle)
-                (local-set-key "\C-c\C-h" 'haskell-hayoo)
-                (setq haskell-font-lock-symbols t))))
-
-(if (require 'cmake-mode "cmake-mode.el" t)
-    (setq auto-mode-alist
-          (append '(("CMakeLists\\.txt\\'" . cmake-mode)
-                    ("\\.cmake\\'" . cmake-mode))
-                  auto-mode-alist)))
-
-(if (file-exists-p "~/.emacs.d/init-local.el")
-    (load "~/.emacs.d/init-local.el"))
-
-(if (file-exists-p "~/dev/distel")
-    (progn
-      (add-to-list 'load-path "~/dev/distel/elisp/")
-      (require 'distel)
-      (distel-setup)))
-
-(if (require 'markdown-mode "markdown-mode.el" t)
-    (setq auto-mode-alist
-          (cons '("\\.md" . markdown-mode) auto-mode-alist)))
-
-(if (file-exists-p "~/dev/geiser/build/elisp/geiser-load.el")
-    (load "~/dev/geiser/build/elisp/geiser-load"))
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "chromium")
