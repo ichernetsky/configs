@@ -22,6 +22,10 @@
                              (eldoc-add-command
                               'paredit-backward-delete
                               'paredit-close-round)))
+        (:name erlware-mode
+               :after (progn (setq exec-path (cons "~/dev/erl/cur/bin" exec-path))
+                             (setq erlang-man-root-dir "~/dev/erl/cur")
+                             (require 'erlang-start)))
         (:name distel
                :after (distel-setup))))
 
