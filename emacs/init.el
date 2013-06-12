@@ -9,19 +9,11 @@
       (eval-print-last-sexp))))
 
 (setq el-get-sources
-      '((:name show-wspace
-               :after (add-hook 'c-mode-hook
-                                (lambda ()
-                                  (show-ws-highlight-tabs)
-                                  (show-ws-highlight-hard-spaces)
-                                  (show-ws-highlight-trailing-whitespace))))))
+      '((:name distel
+               :after (distel-setup))))
 
 (setq dim-packages
-      (append
-       ;; list of packages we use straight from official recipes
-       '(markdown-mode cmake-mode)
-
-       (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+      '(paredit markdown-mode cmake-mode erlware-mode distel magit))
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 (el-get 'sync dim-packages)
