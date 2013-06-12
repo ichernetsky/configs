@@ -39,9 +39,9 @@
   (windmove-default-keybindings))
 
 ;; disable unnessary clutter
-(menu-bar-mode nil)
-(tool-bar-mode nil)
-(scroll-bar-mode nil)
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+(scroll-bar-mode 0)
 
 (global-font-lock-mode t)
 (ido-mode t)
