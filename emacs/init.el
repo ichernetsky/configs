@@ -30,7 +30,7 @@
                :after (distel-setup))))
 
 (setq dim-packages
-      '(paredit markdown-mode cmake-mode erlware-mode distel magit))
+      '(paredit markdown-mode cmake-mode erlware-mode distel magit puppet-mode))
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 (el-get 'sync dim-packages)
