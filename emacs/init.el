@@ -1,3 +1,9 @@
+(if (eq system-type 'darwin)
+  (setenv "PATH" (format "%s:%s:%s"
+                         (getenv "PATH")
+                         "/usr/local/git/bin")))
+(setq exec-path (split-string (getenv "PATH") path-separator))
+
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 (unless (require 'el-get nil 'noerror)
@@ -21,23 +27,19 @@
                              (require 'eldoc)
                              (eldoc-add-command
                               'paredit-backward-delete
-                              'paredit-close-round)))
-        (:name erlware-mode
-               :after (progn (setq exec-path (cons "~/dev/erl/cur/bin" exec-path))
-                             (setq erlang-man-root-dir "~/dev/erl/cur")
-                             (require 'erlang-start)))
-        (:name distel
-               :after (distel-setup))))
+                              'paredit-close-round)))))
 
 (setq dim-packages
-      '(paredit markdown-mode cmake-mode erlware-mode distel magit puppet-mode))
+      '(paredit markdown-mode cmake-mode erlware-mode magit puppet-mode web-mode
+        clojure-mode less-css-mode highlight-chars))
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 (el-get 'sync dim-packages)
 
 ;; do not make backup files
+(setq backup-inhibited t)
+(setq auto-save-default nil)
 (setq make-backup-files nil)
-(auto-save-mode nil)
 ;; remove the splash screen at startup
 (setq inhibit-splash-screen t)
 ;; make emacs ask about missing newline
@@ -72,3 +74,34 @@
       browse-url-generic-program "chromium")
 
 (setq ring-bell-function 'ignore)
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'reverse)
+
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
+(add-hook 'dired-load-hook
+	  (function (lambda () (load "dired-x"))))
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+(setq web-mode-markup-indent-offset 4)
+(setq web-mode-css-indent-offset 4)
+(setq web-mode-css-indent-offset 4)
+(setq web-mode-style-padding 4)
+(setq web-mode-script-padding 4)
+(setq web-mode-script-padding 4)
+
+(require 'highlight-chars)
+(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
+(add-hook 'font-lock-mode-hook 'hc-highlight-hard-spaces)
+(add-hook 'font-lock-mode-hook 'hc-highlight-hard-hyphens)
+(add-hook 'font-lock-mode-hook 'hc-highlight-trailing-whitespace)
