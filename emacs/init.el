@@ -24,7 +24,9 @@
 (el-get 'sync '(idomenu smex elisp-slime-nav auto-compile hl-sexp
                         rainbow-delimiters highlight-chars aggressive-indent-mode
                         macrostep paredit markdown-mode web-mode erlang-mode distel
-                        clojure-mode puppet-mode cucumber cmake-mode magit))
+                        clojure-mode puppet-mode cucumber cmake-mode magit
+                        git-blame git-commit-mode git-rebase-mode git-messenger
+                        git-timemachine gitconfig))
 
 (require 'conf-lisp)
 (require 'conf-c)
