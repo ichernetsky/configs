@@ -38,4 +38,6 @@
 (setq goto-address-mail-face 'link)
 (setq-default regex-tool-backend 'perl)
 
+(global-subword-mode t)
+
 (provide 'conf-basic)
