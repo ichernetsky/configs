@@ -18,13 +18,13 @@
                :build/darwin (list (list "make" (format "EMACS=%s" el-get-emacs) "clean" "base")))))
 
 ;; (setq dim-packages
-;;       '(cmake-mode magit less-css-mode))
+;;       '(less-css-mode))
 
 (el-get 'sync '(exec-path-from-shell))
 (el-get 'sync '(idomenu smex elisp-slime-nav auto-compile hl-sexp
                         rainbow-delimiters highlight-chars aggressive-indent-mode
                         macrostep paredit markdown-mode web-mode erlang-mode distel
-                        clojure-mode puppet-mode cucumber))
+                        clojure-mode puppet-mode cucumber cmake-mode magit))
 
 (require 'conf-lisp)
 (require 'conf-c)
