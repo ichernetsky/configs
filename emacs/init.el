@@ -2,6 +2,12 @@
   (add-to-list 'load-path "/Applications/Emacs.app/Contents/Resources/lisp/emacs-lisp"))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+(require 'tramp)
+(setq tramp-ssh-controlmaster-options
+      (concat
+       "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+       "-o ControlMaster=auto -o ControlPersist=no"))
+
 (require 'conf-el-get)
 (require 'conf-basic)
 (require 'conf-ido)
