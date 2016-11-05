@@ -25,39 +25,35 @@
 (define-key emacs-lisp-mode-map (kbd "C-c C-z") 'conf-lisp/switch-to-ielm)
 (define-key ielm-map (kbd "C-c C-z") 'conf-lisp/repl-switch-back)
 
-(setq load-prefer-newer t)
-
 (defconst conf-lisp/elispy-mode-hooks
   '(emacs-lisp-mode-hook ielm-mode-hook)
   "Major modes relating to elisp.")
 
 (defconst conf-lisp/lispy-mode-hooks
   (append conf-lisp/elispy-mode-hooks
-          '(lisp-mode-hook inferior-lisp-mode-hook lisp-interaction-mode-hook))
+          '(lisp-mode-hook inferior-lisp-mode-hook lisp-interaction-mode-hook
+                           clojure-mode-hook cider-mode-hook cider-repl-mode-hook))
   "All lispy major modes.")
 
 (defun conf-lisp/lisp-setup ()
   "Enable features useful in any Lisp mode."
   (rainbow-delimiters-mode t)
   (enable-paredit-mode)
-  (aggressive-indent-mode)
   (turn-on-eldoc-mode)
   (add-hook 'after-save-hook #'check-parens nil t))
+
+(dolist (hook conf-lisp/lispy-mode-hooks)
+  (add-hook hook 'conf-lisp/lisp-setup))
 
 (defun conf-lisp/emacs-lisp-setup ()
   "Enable features useful when working with elisp."
   (elisp-slime-nav-mode t))
-
-(dolist (hook conf-lisp/lispy-mode-hooks)
-  (add-hook hook 'conf-lisp/lisp-setup))
 
 (dolist (hook conf-lisp/elispy-mode-hooks)
   (add-hook hook 'conf-lisp/emacs-lisp-setup))
 
 (add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
 (add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode))
-
-(global-set-key (kbd "C-h K") 'find-function-on-key)
 
 (eldoc-add-command
  'paredit-backward-delete
