@@ -20,17 +20,17 @@
          :info nil
          :build/darwin (list (list "make" (format "EMACS=%s" el-get-emacs) "clean" "base")))))
 
-;; idomenu
-;; macrostep web-mode
-;; flex-mode
-
 (el-get 'sync '(color-theme-tangotango
-                auto-compile
-                highlight-chars hl-sexp rainbow-delimiters
-                smex paredit magit gitconfig cider
-                elisp-slime-nav clojure-mode company-mode distel
+                diminish beacon which-key volatile-highlights
+                anzu undo-tree dtrt-indent
+                elisp-slime-nav auto-compile
+                highlight-chars
+                helm helm-descbinds helm-ag helm-gtags
+                gitconfig magit
                 cmake-mode puppet-mode dockerfile-mode
                 yaml-mode markdown-mode go-mode lua-mode
-                csv-mode protobuf-mode))
+                protobuf-mode web-mode distel
+                paredit rainbow-delimiters hl-sexp
+                company-mode clojure-mode cider))
 
 (provide 'conf-el-get)

@@ -4,8 +4,8 @@
 
   (when (locate-file "gnutls-cli" exec-path)
     (setq tls-program
-          '("gnutls-cli --x509cafile /etc/ssl/certs/ca-certificates.crt -p %p %h --no-ca-verification --no-ocsp"
-            "gnutls-cli --x509cafile /etc/ssl/certs/ca-certificates.crt -p %p %h --protocols ssl3 --no-ca-verification --no-ocsp"
-            "openssl s_client -connect %h:%p -CAfile /etc/ssl/certs/ca-certificates.crt -no_ssl2 -ign_eof"))))
+          '("/usr/local/bin/gnutls-cli --x509cafile /etc/ssl/certs/ca-certificates.crt -p %p %h --no-ca-verification --no-ocsp"
+            "/usr/local/bin/gnutls-cli --x509cafile /etc/ssl/certs/ca-certificates.crt -p %p %h --protocols ssl3 --no-ca-verification --no-ocsp"
+            "/usr/bin/openssl s_client -connect %h:%p -CAfile /etc/ssl/certs/ca-certificates.crt -no_ssl2 -ign_eof"))))
 
 (provide 'conf-mac)

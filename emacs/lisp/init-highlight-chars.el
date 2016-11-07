@@ -4,6 +4,6 @@
                 hc-highlight-hard-spaces
                 hc-highlight-hard-hyphens
                 hc-highlight-trailing-whitespace))
-  (add-hook 'font-lock-mode-hook mode))
+  (add-hook 'prog-mode-hook mode))
 
 (provide 'init-highlight-chars)

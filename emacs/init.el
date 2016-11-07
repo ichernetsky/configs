@@ -11,17 +11,33 @@
 (setq package-selected-packages '(erlang))
 
 (package-initialize)
+(package-install-selected-packages)
 
 (require 'conf-mac)
-(require 'conf-basic)
 (require 'conf-el-get)
-(require 'conf-ido)
+
+(require 'conf-basic)
+(require 'conf-helm)
 
 (require 'conf-visual)
 
+(require 'conf-elisp)
 (require 'conf-lisp)
 (require 'conf-c)
+(require 'conf-cc)
 (require 'conf-clj)
-(require 'conf-org)
 
 (provide 'init)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages (quote (queue erlang))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
