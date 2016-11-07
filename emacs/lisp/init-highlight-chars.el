@@ -6,4 +6,7 @@
                 hc-highlight-trailing-whitespace))
   (add-hook 'prog-mode-hook mode))
 
+(add-hook 'makefile-mode-hook (lambda ()
+                                (hc-dont-highlight-tabs)))
+
 (provide 'init-highlight-chars)

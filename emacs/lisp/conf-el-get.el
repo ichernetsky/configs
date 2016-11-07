@@ -24,8 +24,9 @@
                 diminish beacon which-key volatile-highlights
                 anzu undo-tree dtrt-indent
                 elisp-slime-nav auto-compile
-                highlight-chars
+                highlight-chars projectile
                 helm helm-descbinds helm-ag helm-gtags
+                helm-projectile
                 gitconfig magit
                 cmake-mode puppet-mode dockerfile-mode
                 yaml-mode markdown-mode go-mode lua-mode
