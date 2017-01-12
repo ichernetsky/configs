@@ -4,7 +4,10 @@
                 hc-highlight-hard-spaces
                 hc-highlight-hard-hyphens
                 hc-highlight-trailing-whitespace))
-  (add-hook 'prog-mode-hook mode))
+  (dolist (hook '(prog-mode-hook
+                  markdown-mode-hook
+                  rst-mode-hook))
+    (add-hook hook mode)))
 
 (add-hook 'makefile-mode-hook (lambda ()
                                 (hc-dont-highlight-tabs)))
