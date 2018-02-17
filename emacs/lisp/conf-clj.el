@@ -7,7 +7,4 @@
 (dolist (hook '(clojure-mode-hook cider-mode-hook cider-repl-mode-hook))
   (add-hook hook 'conf-clj/hook-fn))
 
-(add-hook 'cider-repl-mode-hook #'company-mode)
-(add-hook 'cider-mode-hook #'company-mode)
-
 (provide 'conf-clj)

@@ -1,11 +1,8 @@
 (require 'cc-mode)
-(require 'company)
 
-(setq c-basic-offset 4)
-(setq c-default-style '((java-mode . "java")
-                        (awk-mode . "awk")
-                        (other . "k&r")))
-
-(define-key c-mode-map [(tab)] 'company-complete)
+(setq-default c-basic-offset 2)
+(setq-default c-default-style '((java-mode . "java")
+                                (awk-mode . "awk")
+                                (other . "k&r")))
 
 (provide 'conf-c)
