@@ -1,8 +1,0 @@
-(:name dracula-theme
-       :description "A dark theme for Emacs"
-       :type github
-       :pkgname "dracula/emacs"
-       :depends color-theme
-       :prepare (progn
-                  (add-to-list 'custom-theme-load-path default-directory)
-                  (autoload 'dracula "dracula-theme" "color-theme: dracula" t)))
