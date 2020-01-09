@@ -70,7 +70,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; fix trailing whitespaces on file save
-(add-hook 'before-save-hook 'whitespace-cleanup)
+(add-hook 'before-save-hook #'whitespace-cleanup)
 
 ;; replace a selection with what being typed
 (delete-selection-mode 1)
@@ -145,9 +145,11 @@
 
 ;; set file search paths
 (use-package exec-path-from-shell
+  :custom
+  (exec-path-from-shell-check-startup-files nil)
   :config
   (exec-path-from-shell-initialize))
-(dolist (path (list "/usr/local/bin" (expand-file-name "~/bin")))
+(dolist (path (list "/usr/local/bin/" (expand-file-name "~/bin/")))
   (unless (member path exec-path)
     (add-to-list 'exec-path path)))
 
@@ -210,24 +212,16 @@
    ("M-X" . smex-major-mode-commands)))
 
 ;; highlight irritating whitespaces
-(use-package highlight-chars
-  :commands
-  (hc-highlight-tabs
-   hc-highlight-hard-spaces
-   hc-highlight-hard-hyphens
-   hc-highlight-trailing-whitespace
-   hc-dont-highlight-tabs)
-  :init
-  (dolist (mode '(hc-highlight-tabs
-                  hc-highlight-hard-spaces
-                  hc-highlight-hard-hyphens
-                  hc-highlight-trailing-whitespace))
-    (dolist (hook '(prog-mode-hook
-                    markdown-mode-hook
-                    rst-mode-hook))
-      (add-hook hook mode)))
+(use-package highlight-chars)
 
-  (add-hook 'makefile-mode-hook (lambda () (hc-dont-highlight-tabs))))
+(defun hc-setup ()
+  (hc-highlight-tabs)
+  (hc-highlight-trailing-whitespace)
+  (hc-highlight-hard-spaces)
+  (hc-highlight-hard-hyphens))
+
+(add-hook 'prog-mode-hook #'hc-setup)
+(add-hook 'makefile-mode-hook #'hc-dont-highlight-tabs)
 
 ;; interface to the silver searcher
 (use-package ag)
@@ -327,7 +321,7 @@
 ;; a git porcelain inside emacs
 (use-package magit
   :init
-  (add-hook 'git-commit-mode-hook 'goto-address-mode)
+  (add-hook 'git-commit-mode-hook #'goto-address-mode)
   :custom
   (magit-process-popup-time 10)
   (magit-diff-refine-hunk t)
@@ -340,7 +334,7 @@
 
 ;; make scripts executable automatically on save
 (add-hook 'after-save-hook
-          'executable-make-buffer-file-executable-if-script-p)
+          #'executable-make-buffer-file-executable-if-script-p)
 
 ;; c/c++ mode options
 (setq-default c-default-style '((java-mode . "java")
@@ -351,8 +345,9 @@
 (use-package cmake-mode)
 
 ;; golang files
-(use-package go-mode
-  :hook (go-mode . #'hc-dont-highlight-tabs))
+(use-package go-mode)
+
+(add-hook 'go-mode-hook #'hc-dont-highlight-tabs)
 
 ;; protobufs
 (use-package protobuf-mode)
@@ -418,12 +413,21 @@
 
 (use-package lsp-mode
   :commands
-  lsp
+  (lsp lsp-deferred)
   :hook
   (c-mode-common . lsp-deferred)
+  (go-mode . lsp-deferred)
   :custom
+  (lsp-enable-indentation nil)
+  (lsp-enable-on-type-formatting nil)
   (lsp-prefer-flymake nil)
   (lsp-enable-snippet nil))
+
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
 (use-package lsp-ui
   :commands
