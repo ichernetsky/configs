@@ -138,6 +138,9 @@
      :straight nil
      ,@args))
 
+;; keep the mode bar tidy
+(use-package delight)
+
 ;; spaces and punctuation are not only word boundaries
 (use-feature subword
   :delight)
@@ -164,9 +167,6 @@
                 #'browse-url-text-emacs)
                (t #'browse-url-default-browser)))
 
-;; keep the mode bar tidy
-(use-package delight)
-
 (use-feature emacs
   :delight
   (abbrev-mode)
@@ -183,33 +183,128 @@
 (use-feature eldoc
   :delight)
 
-(defun ido-recentf-open ()
-  "Use `ido-completing-read' to \\[find-file] a recent file."
-  (interactive)
-  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-      (message "Opening file...")
-    (message "Aborting")))
+;; magit auto-completion needs it
+;; (use-package ido-completing-read+)
 
-(use-package ido
-  :commands
-  (ido-mode)
+;; a git porcelain inside emacs
+(use-package magit
   :init
-  (ido-mode 1)
+  (add-hook 'git-commit-mode-hook #'goto-address-mode)
   :custom
-  (ido-enable-flex-matching t)
-  (ido-everywhere t)
-  (ido-enable-last-directory-history t)
-  (ido-enable-prefix nil)
-  :bind
-  ("C-x C-r" . ido-recentf-open))
+  (magit-process-popup-time 10)
+  (magit-diff-refine-hunk t)
+  ;; (magit-completing-read-function 'magit-ido-completing-read)
+  :config
+  (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-goto-parent-section))
+
+;; (setq-default completion-styles '(flex))
+
+(use-package helm
+  :delight
+  :init
+  :config
+  (global-unset-key (kbd "C-x c"))
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "C-x C-d") 'helm-browse-project)
+  (global-set-key (kbd "C-x r p") 'helm-projects-history)
+  (global-set-key (kbd "C-x b") 'helm-mini)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (helm-autoresize-mode 1)
+  (helm-mode 1)
+  :custom
+  (helm-M-x-fuzzy-match t)
+  (helm-buffers-fuzzy-matching t)
+  (helm-recentf-fuzzy-match t)
+
+  (helm-split-window-inside-p t)
+  (helm-move-to-line-cycle-in-source t)
+
+  (helm-ff-search-library-in-sexp t)
+  (helm-ff-file-name-history-use-recentf t)
+
+  (helm-autoresize-max-height 0)
+  (helm-autoresize-min-height 30)
+
+  (helm-commands-using-frame '(completion-at-point
+                               helm-apropos
+                               helm-eshell-prompts
+                               helm-imenu
+                               helm-imenu-in-all-buffers)))
+
+(use-feature helm-adaptive
+  :custom
+  (helm-adaptive-history-file nil)
+  :config
+  (helm-adaptive-mode 1))
+
+(use-feature helm-sys
+  :commands
+  (helm-top)
+  :config
+  (helm-top-poll-mode 1))
+
+(use-feature helm-info
+  :bind ("C-h r" . helm-info-emacs))
+
+(use-feature helm-eshell
+  :config
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
+  (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+  (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history))
+
+(use-package helm-ls-git
+  :custom
+  (helm-ls-git-status-command 'magit-status-setup-buffer))
+
+(use-package helm-ag
+  :custom
+  (helm-ag-base-command "rg --no-heading")
+  (helm-ag-success-exit-status '(0 2)))
+
+;; project management and navigation
+(use-package projectile
+  :config
+  (projectile-global-mode 1)
+  :custom
+  (projectile-mode-line-function
+   '(lambda () (format " prj[%s]" (projectile-project-name))))
+  (projectile-completion-system 'helm))
+
+(use-package helm-projectile
+  :config
+  (helm-projectile-on))
+
+;; (defun ido-recentf-open ()
+;;   "Use `ido-completing-read' to \\[find-file] a recent file."
+;;   (interactive)
+;;   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+;;       (message "Opening file...")
+;;     (message "Aborting")))
+
+;; (use-package ido
+;;   :commands
+;;   (ido-mode)
+;;   :init
+;;   (ido-mode 1)
+;;   :custom
+;;   (ido-enable-flex-matching t)
+;;   (ido-everywhere t)
+;;   (ido-enable-last-directory-history t)
+;;   (ido-enable-prefix nil)
+;;   :bind
+;;   ("C-x C-r" . ido-recentf-open))
 
 ;; nice interface to recently and frequently used commands on top of ido
-(use-package smex
-  :config
-  (smex-initialize)
-  :bind
-  (("M-x" . smex)
-   ("M-X" . smex-major-mode-commands)))
+;; (use-package smex
+;;   :config
+;;   (smex-initialize)
+;;   :bind
+;;   (("M-x" . smex)
+;;    ("M-X" . smex-major-mode-commands)))
 
 ;; highlight irritating whitespaces
 (use-package highlight-chars)
@@ -222,9 +317,7 @@
 
 (add-hook 'prog-mode-hook #'hc-setup)
 (add-hook 'makefile-mode-hook #'hc-dont-highlight-tabs)
-
-;; interface to the silver searcher
-(use-package ag)
+(add-hook 'conf-mode-hook #'hc-setup)
 
 ;; interface to ripgrep
 (use-package rg)
@@ -312,23 +405,6 @@
                                lisp-interaction-mode-hook))
   (add-hook hook #'lisp-hook-fn))
 
-;; project management and navigation
-(use-package projectile
-  :custom
-  (projectile-mode-line-function
-   '(lambda () (format " prj[%s]" (projectile-project-name)))))
-
-;; a git porcelain inside emacs
-(use-package magit
-  :init
-  (add-hook 'git-commit-mode-hook #'goto-address-mode)
-  :custom
-  (magit-process-popup-time 10)
-  (magit-diff-refine-hunk t)
-  (magit-completing-read-function 'magit-ido-completing-read)
-  :config
-  (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-goto-parent-section))
-
 ;; shell script mode options
 (setq-default sh-basic-offset 4)
 
@@ -411,16 +487,25 @@
   :config
   (global-company-mode 1))
 
+(use-package groovy-mode)
+
+;; 100 MB
+(setq gc-cons-threshold (* 100 1024 1024))
+;; 1 MB
+(setq read-process-output-max (* 1 1024 1024))
+
 (use-package lsp-mode
+  :config
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
   :commands
   (lsp lsp-deferred)
   :hook
   (c-mode-common . lsp-deferred)
   (go-mode . lsp-deferred)
   :custom
+  (lsp-file-watch-threshold 2000)
   (lsp-enable-indentation nil)
   (lsp-enable-on-type-formatting nil)
-  (lsp-prefer-flymake nil)
   (lsp-enable-snippet nil))
 
 (defun lsp-go-install-save-hooks ()
@@ -433,14 +518,44 @@
   :commands
   lsp-ui-mode)
 
+(use-package treemacs)
+(use-package treemacs-projectile)
+(use-package treemacs-magit)
+(use-package lsp-treemacs)
+
+(use-package helm-lsp)
+
 (use-package company-lsp
   :custom
   (company-lsp-enable-recompletion t)
   :config
   (add-to-list 'company-backends 'company-lsp))
 
+(when (executable-find "hunspell")
+  (setq-default ispell-program-name "hunspell")
+  (setq ispell-really-hunspell t))
+
+(dolist (hook '(text-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+
+;; install flycheck
+;; company-capf
+
+(dolist (mode '(c-mode-common-hook
+                emacs-lisp-mode-hook
+                inferior-lisp-mode-hook
+                go-mode-hook
+                clojure-mode-hook
+                dockerfile-mode-hook))
+  (add-hook mode (lambda () (flyspell-prog-mode))))
+
+(use-package langtool
+  :custom
+  langtool-bin "/usr/local/bin/languagetool"
+  langtool-mother-tongue "en")
+
 ;; some fancy fonts and colors
 (when (display-graphic-p)
-  (set-face-attribute 'default t :font "Fira Code Retina")
+  (set-face-attribute 'default nil :font "Fira Code Retina")
   (set-face-attribute 'default nil :height 160)
-  (use-package dracula-theme))
+  (use-package espresso-theme))
