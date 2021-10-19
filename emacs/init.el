@@ -526,10 +526,17 @@
 (use-package helm-lsp)
 
 (use-package company-lsp
+  :commands
+  company-lsp
   :custom
   (company-lsp-enable-recompletion t)
   :config
   (add-to-list 'company-backends 'company-lsp))
+
+(use-package ccls
+  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+         (lambda ()
+           (lsp))))
 
 (when (executable-find "hunspell")
   (setq-default ispell-program-name "hunspell")
